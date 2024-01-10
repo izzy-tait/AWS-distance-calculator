@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Two Point Oh!</title>
+    <!-- Styling for the client UI -->
+    <style>
+    h1 {
+        color: #FFFFFF;
+        font-family: system-ui;
+		margin-left: 20px;
+        }
+    p {
+        color: #FFFFFF;
+        font-family: system-ui;
+		margin-left: 20px;
+        }
+	body {
+        background-color: #222629;
+        }
+    label {
+        color: #86C232;
+        font-family: system-ui;
+        font-size: 20px;
+        margin-left: 20px;
+		margin-top: 20px;
+        }
+     button {
+        background-color: #86C232;
+		border-color: #86C232;
+		color: #FFFFFF;
+        font-family: system-ui;
+        font-size: 20px;
+		font-weight: bold;
+        margin-left: 20px;
+		margin-top: 20px;
+		width: 140px;
+        }
+	 input {
+        color: #222629;
+        font-family: system-ui;
+        font-size: 20px;
+        margin-left: 10px;
+		margin-top: 20px;
+		width: 150px;
+        }
+     div {
+        color:#86C232;
+        font-size: 35px;
+        }
+    </style>
+    <script>
+        // callAPI function that takes the latitude and longitude numbers as parameters
+        var callAPI = (lat1,lon1,lat2,lon2)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"lat1":lat1,"lon1":lon1,"lat2":lat2,"lon2":lon2});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("API URL here", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                const distance = JSON.parse(result).body.slice(1, -1);
+                const distanceDiv = document.getElementById("show-points"); 
+                distanceDiv.textContent = distance;
+            })
+            .catch(error => console.log('error', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>TWO POINT OH!</h1>
+	<p>Enter the latitude and longitude in decimal degrees for two points, then click Calculate to view the distance in kilometers between the two points.</p>
+	<br>
+	<form>
+        <label>Latitude 1:</label>
+        <input type="text" id="lat1">
+        <label>Longitude 1:</label>
+        <input type="text" id="lon1">
+		<br><br>
+        <label>Latitude 2:</label>
+        <input type="text" id="lat2">
+        <label>Longitude 2:</label>
+        <input type="text" id="lon2">
+		<br><br>
+        <button type="button" onclick="callAPI(document.getElementById('lat1').value,document.getElementById('lon1').value,document.getElementById('lat2').value, document.getElementById('lon2').value)">CALCULATE</button>
+        <br><br>
+        <div id="show-points"></div>
+    </form>
+</body>
+</html>
